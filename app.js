@@ -23,10 +23,12 @@ app.get('/', (req, res) => {
 
   if (today.getDay() === 6 || today.getDay() === 0) {
     // console.log('Today is a weekend!');
-    res.send('<h1>Today is a weekend!</h1>');
+    res.write('<h1>Today is a weekend!</h1>');
   } else {
     // console.log('Today is a weekday!');
-    res.send('<h1>Today is a weekday!</h1>');
+    res.write('<h1>Today is a weekday!</h1>');
+    res.write('<h2>BooHoo! This gentleman has to work today!!</h2>');
+    res.send();
   }
 });
 
