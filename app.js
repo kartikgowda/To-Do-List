@@ -3,11 +3,12 @@ const bodyParser = require('body-parser');
 const ejs = require('ejs');
 
 const app = express();
-let items = [];
+let items = ['Buy Food', 'Cook Food', 'Eat Food'];
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   // Create a new date object

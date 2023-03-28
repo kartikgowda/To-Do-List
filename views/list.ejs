@@ -4,23 +4,32 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
     <title>Todo List v1</title>
   </head>
-  <!--? This code is used to display the list of items that the user has entered in the form.It will display the list of items that the user has entered as well as the default list of items that are already on the page. The form is used to allow the user to add to the list of items that are displayed. The for loop is used to display the list of items that the user has entered. -->
+  <!--? Display the list of items that the user has entered in the form.It will display the list of items that the user has entered as well as the default list of items that are already on the page. The form is used to allow the user to add to the list of items that are displayed. The for loop is used to display the list of items that the user has entered. -->
 
   <body>
-    <h1><%=todayDay%> List</h1>
-    <ul>
-      <li>Buy Food</li>
-      <li>Cook Food</li>
-      <li>Eat Food</li>
+    <div class="box" id="heading">
+      <h1><%=todayDay%></h1>
+    </div>
+    <div class="box">
       <% for( let index=0; index < newListItem.length; index++ ) { %>
-      <li><%= newListItem[index] %></li>
+      <div class="item">
+        <input type="checkbox" />
+        <p><%= newListItem[index] %></p>
+      </div>
       <% } %>
-    </ul>
-    <form action="/" method="post">
-      <input type="text" name="newItem" />
-      <button type="submit">Add</button>
-    </form>
+      <form action="/" method="post">
+        <input type="text" name="newItem" placeholder="New Item" />
+        <button type="submit">+</button>
+      </form>
+    </div>
   </body>
 </html>
