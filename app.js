@@ -3,8 +3,11 @@ const bodyParser = require('body-parser');
 const ejs = require('ejs');
 
 const app = express();
+let items = [];
 
 app.set('view engine', 'ejs');
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   // Create a new date object
@@ -18,10 +21,18 @@ app.get('/', (req, res) => {
   };
 
   // Use the options object and the toLocaleString method to create a string for today's date
+  // @ts-ignore
   let day = today.toLocaleString('en-US', options);
 
   // Render the list.ejs file and pass in the date string
-  res.render('list', { todayDay: day });
+  res.render('list', { todayDay: day, newListItem: items });
+});
+
+app.post('/', (req, res) => {
+  let item = req.body.newItem;
+  items.push(item);
+  // console.log(item);
+  res.redirect('/');
 });
 
 app.listen(3000, () => {

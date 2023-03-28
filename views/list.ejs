@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List v1</title>
-</head>
+  </head>
+  <!--? This code is used to display the list of items that the user has entered in the form.It will display the list of items that the user has entered as well as the default list of items that are already on the page. The form is used to allow the user to add to the list of items that are displayed. The for loop is used to display the list of items that the user has entered. -->
 
-<body>
-    <h1>
-        <%=todayDay%> List
-    </h1>
+  <body>
+    <h1><%=todayDay%> List</h1>
     <ul>
-        <li>Buy Food</li>
-        <li>Cook Food</li>
-        <li>Eat Food</li>
+      <li>Buy Food</li>
+      <li>Cook Food</li>
+      <li>Eat Food</li>
+      <% for( let index=0; index < newListItem.length; index++ ) { %>
+      <li><%= newListItem[index] %></li>
+      <% } %>
     </ul>
-
-
-</body>
-
+    <form action="/" method="post">
+      <input type="text" name="newItem" />
+      <button type="submit">Add</button>
+    </form>
+  </body>
 </html>
