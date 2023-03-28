@@ -51,6 +51,10 @@ app.get('/work', (req, res) => {
 //   res.redirect('/work');
 // });
 
+app.get('/about', (req, res) => {
+  res.render('about');
+});
+
 app.listen(3000, () => {
   console.log('Todoist App listening on port 3000!');
 });

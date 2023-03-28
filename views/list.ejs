@@ -1,40 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap"
-      rel="stylesheet"
+<%- include('header') %>
+<!--? Display the list of items that the user has entered in the form.It will display the list of items that the user has entered as well as the default list of items that are already on the page. The form is used to allow the user to add to the list of items that are displayed. The for loop is used to display the list of items that the user has entered. -->
+<div class="box" id="heading">
+  <h1><%= listTitle %></h1>
+</div>
+<div class="box">
+  <% for( let index=0; index < newListItem.length; index++ ) { %>
+  <div class="item">
+    <input type="checkbox" />
+    <p><%= newListItem[index] %></p>
+  </div>
+  <% } %>
+  <form action="/" method="post">
+    <input
+      type="text"
+      name="newItem"
+      placeholder="New Item"
+      autocomplete="off"
     />
-    <link rel="stylesheet" href="css/styles.css" />
-    <title>Todo List v1</title>
-  </head>
-  <!--? Display the list of items that the user has entered in the form.It will display the list of items that the user has entered as well as the default list of items that are already on the page. The form is used to allow the user to add to the list of items that are displayed. The for loop is used to display the list of items that the user has entered. -->
+    <button type="submit" name="list" value="<%=listTitle%>">➕</button>
+  </form>
+</div>
 
-  <body>
-    <div class="box" id="heading">
-      <h1><%= listTitle %></h1>
-    </div>
-    <div class="box">
-      <% for( let index=0; index < newListItem.length; index++ ) { %>
-      <div class="item">
-        <input type="checkbox" />
-        <p><%= newListItem[index] %></p>
-      </div>
-      <% } %>
-      <form action="/" method="post">
-        <input
-          type="text"
-          name="newItem"
-          placeholder="New Item"
-          autocomplete="off"
-        />
-        <button type="submit" name="list" value="<%=listTitle%>">➕</button>
-      </form>
-    </div>
-  </body>
-</html>
+<%- include('footer') %>
