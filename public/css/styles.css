@@ -86,8 +86,8 @@ input[type='text']:focus {
 
 ::placeholder {
   color: grey;
-  font-family: 'Patrick Hand', cursive;
   opacity: 1;
+  font-family: 'Patrick Hand', cursive;
 }
 
 footer {

@@ -4,6 +4,7 @@ const ejs = require('ejs');
 
 const app = express();
 let items = ['Buy Food', 'Cook Food', 'Eat Food'];
+let workItems = [];
 
 app.set('view engine', 'ejs');
 
@@ -26,15 +27,29 @@ app.get('/', (req, res) => {
   let day = today.toLocaleString('en-US', options);
 
   // Render the list.ejs file and pass in the date string
-  res.render('list', { todayDay: day, newListItem: items });
+  res.render('list', { listTitle: day, newListItem: items });
 });
 
 app.post('/', (req, res) => {
   let item = req.body.newItem;
-  items.push(item);
-  // console.log(item);
-  res.redirect('/');
+  if (req.body.list === 'Work') {
+    workItems.push(item);
+    res.redirect('/work');
+  } else {
+    items.push(item);
+    res.redirect('/');
+  }
 });
+
+app.get('/work', (req, res) => {
+  res.render('list', { listTitle: 'Work', newListItem: workItems });
+});
+
+// app.post('/work', (req, res) => {
+//   let item = req.body.newItem;
+//   workItems.push(item);
+//   res.redirect('/work');
+// });
 
 app.listen(3000, () => {
   console.log('Todoist App listening on port 3000!');
