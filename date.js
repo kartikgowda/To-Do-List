@@ -1,4 +1,4 @@
-module.exports.getDate = () => {
+exports.getDate = () => {
   // This function returns the current date in a string format
   let today = new Date();
 
@@ -13,7 +13,7 @@ module.exports.getDate = () => {
   return day;
 }
 
-module.exports.getDay = () => {
+exports.getDay = () => {
   // This function returns the current day in a string format
   let today = new Date();
 
