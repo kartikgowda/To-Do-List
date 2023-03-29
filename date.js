@@ -1,33 +1,27 @@
-module.exports.getDate = getDate;
-
-function getDate() {
+module.exports.getDate = () => {
+  // This function returns the current date in a string format
   let today = new Date();
 
-  // Create an options object with the day, month, and year
-  let options = {
+  const options = {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
   };
 
-  // Use the options object and the toLocaleString method to create a string for today's date
   // @ts-ignore
-  let day = today.toLocaleString('en-US', options);
+  const day = today.toLocaleString('en-US', options);
   return day;
 }
 
-module.exports.getDay = getDay;
-
-function getDay() {
+module.exports.getDay = () => {
+  // This function returns the current day in a string format
   let today = new Date();
 
-  // Create an options object with the day, month, and year
-  let options = {
+  const options = {
     weekday: 'long',
   };
 
-  // Use the options object and the toLocaleString method to create a string for today's date
   // @ts-ignore
-  let day = today.toLocaleString('en-US', options);
+  const day = today.toLocaleString('en-US', options);
   return day;
 }
