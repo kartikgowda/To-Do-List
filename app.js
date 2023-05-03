@@ -38,18 +38,29 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
-Item.insertMany(defaultItems)
-  .then(() => {
-    console.log('Successfully saved default items to DB.');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// Item.insertMany(defaultItems)
+//   .then(() => {
+//     console.log('Successfully saved default items to DB.');
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
 app.get('/', (req, res) => {
   // let day = date.getDate(); //* GetDate (date.js) function (Day,Date,Month)
   // let dayName = date.getDay(); //* GetDay (date.js) function (Day)
-  res.render('list', { listTitle: 'Today', newListItem: items });
+  Item.find({}).then((foundItems) => {
+    if (foundItems.length === 0) {
+      Item.insertMany(defaultItems)
+        .then(() => {
+          console.log('Successfully saved default items to DB.');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      res.redirect('/');
+    } else res.render('list', { listTitle: 'Today', newListItem: foundItems });
+  });
 });
 
 app.post('/', (req, res) => {
@@ -63,9 +74,9 @@ app.post('/', (req, res) => {
   }
 });
 
-app.get('/work', (req, res) => {
-  res.render('list', { listTitle: 'Work', newListItem: workItems });
-});
+// app.get('/work', (req, res) => {
+//   res.render('list', { listTitle: 'Work', newListItem: workItems });
+// });
 
 app.get('/about', (req, res) => {
   res.render('about');
