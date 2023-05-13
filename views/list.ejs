@@ -9,12 +9,14 @@
 
     <!-- ! For Each Loop -->
     <% newListItem.forEach(function(item){ %>
-      <div class="item">
-        <input type="checkbox" />
-        <p>
-          <%= item.name %>
-        </p>
-      </div>
+      <form>
+        <div class="item">
+          <input type="checkbox" />
+          <p>
+            <%= item.name %>
+          </p>
+        </div>
+      </form>
       <% }) %>
 
         <form action="/" method="post">
