@@ -4,9 +4,6 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-// let items = ['Buy Food', 'Cook Food', 'Eat Food'];
-// let workItems = [];
-
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -23,7 +20,8 @@ const itemsSchema = new mongoose.Schema({
 //* Create Model
 const Item = mongoose.model('Item', itemsSchema);
 
-//* Create Documents
+//* Create default items for our to-do list using the Item model
+
 const item1 = new Item({
   name: 'Welcome to your To Do List!',
 });
@@ -37,14 +35,6 @@ const item3 = new Item({
 });
 
 const defaultItems = [item1, item2, item3];
-
-// Item.insertMany(defaultItems)
-//   .then(() => {
-//     console.log('Successfully saved default items to DB.');
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
 
 app.get('/', (req, res) => {
   // let day = date.getDate(); //* GetDate (date.js) function (Day,Date,Month)
@@ -63,6 +53,12 @@ app.get('/', (req, res) => {
   });
 });
 
+//* This code creates a new item in the database when a user submits a form on the index page.
+//* The item is created by calling the save() method on the item, which is a mongoose model.
+//* The save() method is called on the item to save it to the database.
+//* The save() method returns a promise that resolves when the item is saved to the database.
+//* The promise is then resolved, and the user is redirected to the index page.
+
 app.post('/', (req, res) => {
   let itemName = req.body.newItem;
   const item = new Item({
@@ -71,10 +67,6 @@ app.post('/', (req, res) => {
   item.save();
   res.redirect('/');
 });
-
-// app.get('/work', (req, res) => {
-//   res.render('list', { listTitle: 'Work', newListItem: workItems });
-// });
 
 app.get('/about', (req, res) => {
   res.render('about');
