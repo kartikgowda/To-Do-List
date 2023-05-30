@@ -36,10 +36,20 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
+//? Create Schema for custom lists
+
+const listSchema = new mongoose.Schema({
+  name: String,
+  items: [itemsSchema],
+});
+
+const List = mongoose.model('List', listSchema);
+
 // ! Add default items to database if none exist
 app.get('/', (req, res) => {
   // let day = date.getDate(); //* GetDate (date.js) function (Day,Date,Month)
   // let dayName = date.getDay(); //* GetDay (date.js) function (Day)
+
   Item.find({}).then((foundItems) => {
     if (foundItems.length === 0) {
       Item.insertMany(defaultItems)
@@ -66,9 +76,25 @@ app.post('/', (req, res) => {
 
 // ! Add route to handle POST requests for deleting items from the database
 app.post('/delete', (req, res) => {
-  console.log(req.body);
+  const checkedItemId = req.body.checkbox;
+  Item.findByIdAndRemove(checkedItemId).then((err) => {
+    if (err) console.log(err);
+    else console.log('Successfully deleted checked item.');
+  });
+  res.redirect('/');
 });
 
+// ! Add route to handle GET requests for custom lists
+app.get('/:customListName', (req, res) => {
+  const customListName = req.params.customListName;
+  const list = new List({
+    name: customListName,
+    items: defaultItems,
+  });
+  list.save();
+});
+
+//! Add route to handle GET requests for about page
 app.get('/about', (req, res) => {
   res.render('about');
 });
