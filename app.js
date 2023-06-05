@@ -50,18 +50,24 @@ app.get('/', (req, res) => {
   // let day = date.getDate(); //* GetDate (date.js) function (Day,Date,Month)
   // let dayName = date.getDay(); //* GetDay (date.js) function (Day)
 
-  Item.find({}).then((foundItems) => {
-    if (foundItems.length === 0) {
-      Item.insertMany(defaultItems)
-        .then(() => {
-          console.log('Successfully saved default items to DB.');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      res.redirect('/');
-    } else res.render('list', { listTitle: 'Today', newListItem: foundItems });
-  });
+  Item.find({})
+    .then((foundItems) => {
+      if (foundItems.length === 0) {
+        Item.insertMany(defaultItems)
+          .then(() => {
+            console.log('Successfully saved default items to DB.');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        res.redirect('/');
+      } else {
+        res.render('list', { listTitle: 'Today', newListItem: foundItems });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 // ! Add route to handle POST requests for adding new items to the database
@@ -87,11 +93,25 @@ app.post('/delete', (req, res) => {
 // ! Add route to handle GET requests for custom lists
 app.get('/:customListName', (req, res) => {
   const customListName = req.params.customListName;
-  const list = new List({
-    name: customListName,
-    items: defaultItems,
-  });
-  list.save();
+  List.findOne({ name: customListName })
+    .then((foundList) => {
+      if (foundList === null) {
+        const list = new List({
+          name: customListName,
+          items: defaultItems,
+        });
+        list.save();
+        res.redirect('/' + customListName);
+      } else {
+        res.render('list', {
+          listTitle: foundList.name,
+          newListItems: foundList.items,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 //! Add route to handle GET requests for about page
