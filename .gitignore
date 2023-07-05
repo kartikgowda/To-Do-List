@@ -1,3 +1,5 @@
 /.vscode
 Todolist-MongoDB.code-workspace
-.gitignore
+/node_modules
+npm-debug.log
+```
