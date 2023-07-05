@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const _ = require('lodash');
 
 const app = express();
 
@@ -10,7 +11,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 //* Connect to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/todolistDB');
+// mongoose.connect('mongodb://127.0.0.1:27017/todolistDB');
+
+mongoose.connect(
+  'mongodb+srv://admin-kartik:test123@cluster0.stb1b8l.mongodb.net/todolistDB?retryWrites=true&w=majority'
+);
 
 //* Create Schema
 const itemsSchema = new mongoose.Schema({
@@ -47,9 +52,6 @@ const List = mongoose.model('List', listSchema);
 
 // ! Add default items to database if none exist
 app.get('/', (req, res) => {
-  // let day = date.getDate(); //* GetDate (date.js) function (Day,Date,Month)
-  // let dayName = date.getDay(); //* GetDay (date.js) function (Day)
-
   Item.find({})
     .then((foundItems) => {
       if (foundItems.length === 0) {
@@ -62,7 +64,7 @@ app.get('/', (req, res) => {
           });
         res.redirect('/');
       } else {
-        res.render('list', { listTitle: 'Today', newListItem: foundItems });
+        res.render('list', { listTitle: 'Today', newListItems: foundItems });
       }
     })
     .catch((err) => {
@@ -73,26 +75,25 @@ app.get('/', (req, res) => {
 // ! Add route to handle POST requests for adding new items to the database
 app.post('/', (req, res) => {
   let itemName = req.body.newItem;
+  const listName = req.body.list;
   const item = new Item({
     name: itemName,
   });
-  item.save();
-  res.redirect('/');
-});
-
-// ! Add route to handle POST requests for deleting items from the database
-app.post('/delete', (req, res) => {
-  const checkedItemId = req.body.checkbox;
-  Item.findByIdAndRemove(checkedItemId).then((err) => {
-    if (err) console.log(err);
-    else console.log('Successfully deleted checked item.');
-  });
-  res.redirect('/');
+  if (listName === 'Today') {
+    item.save();
+    res.redirect('/');
+  } else {
+    List.findOne({ name: listName }).then((foundList) => {
+      foundList.items.push(item);
+      foundList.save();
+      res.redirect('/' + listName);
+    });
+  }
 });
 
 // ! Add route to handle GET requests for custom lists
 app.get('/:customListName', (req, res) => {
-  const customListName = req.params.customListName;
+  const customListName = _.capitalize(req.params.customListName);
   List.findOne({ name: customListName })
     .then((foundList) => {
       if (foundList === null) {
@@ -112,6 +113,31 @@ app.get('/:customListName', (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+// ! Add route to handle POST requests for deleting items from the database
+// Add route to handle POST requests for deleting items from the database
+app.post('/delete', (req, res) => {
+  const checkedItemId = req.body.checkbox;
+  const listName = req.body.list;
+  if (listName === 'Today') {
+    Item.findByIdAndRemove(checkedItemId, (err) => {
+      if (err) console.log(err);
+      else console.log('Successfully deleted checked item.');
+      res.redirect('/');
+    });
+  } else {
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: checkedItemId } } }
+    )
+      .then(() => {
+        res.redirect('/' + listName);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 });
 
 //! Add route to handle GET requests for about page
